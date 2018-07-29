@@ -8,6 +8,11 @@ var EEIDE = function() {
 	let eeide = {};
 
 	// consts
+	const redMain = "#FF0000";
+	const redFade = "#990000";
+	const greenMain = "#00FF00";
+	const greenFade = "#FFFFFF";
+	
 	const buttonConnect = "button-connect";
 	const buttonCompile = "button-compile";
 	const inputEmail = "input-email";
@@ -17,6 +22,26 @@ var EEIDE = function() {
 	const demoLoad = "demo-load";
 	
 	// ~ HELPER FUNCTIONS ~
+
+	// call a http request
+	let makeHttpRequest = function(url, successCallback, failureCallback) {
+		let request = new XMLHttpRequest();
+		request.open('GET', url, true);
+
+		request.onload = function() {
+			if (this.status >= 200 && this.status < 400) {
+				successCallback(this);
+			} else {
+				failureCallback();
+			}
+		};
+
+		request.onerror = function(e) {
+			failureCallback();
+		};
+
+		request.send();
+	}
 
 	// string replacing function
 	let strRepl = function(str, search, repl) {
@@ -45,7 +70,7 @@ var EEIDE = function() {
 	};
 	
 	// color something on the form then return it to a lighter color
-	let colorItem = function(id, color1 = "#FF0000", color2 = "#990000") {
+	let colorItem = function(id, color1 = redMain, color2 = redFade) {
 		let htmlItem = getById(id);
 		color(htmlItem, color1);
 		setTimeout(() => {
@@ -82,11 +107,11 @@ var EEIDE = function() {
 		let promise = authenticate(email, password).then(auth => {
 			eeide.client = auth.cli;
 			eeide.config = auth.cfg;
-			
-			colorItem(buttonConnect, "#00FF00", "#FFFFFF");
 
 			enable(buttonConnect);
 			enable(buttonCompile);
+			
+			colorItem(buttonConnect, greenMain, greenFade);
 		}).catch(err => {
 			console.log(err);
 			
@@ -100,6 +125,7 @@ var EEIDE = function() {
 		Promise.resolve(promise);
 	}
 
+	// runs the code
 	var compile = function() {
 		disable(buttonConnect);
 		disable(buttonCompile);
@@ -117,7 +143,7 @@ var EEIDE = function() {
 				"var config = eeide.config;" +
 				editor.getSession().getValue());
 			
-			colorItem(buttonCompile, "#00FF00", "#FFFFFF");
+			colorItem(buttonCompile, greenMain, greenFade);
 
 			enable(buttonConnect);
 			enable(buttonCompile);
@@ -135,45 +161,35 @@ var EEIDE = function() {
 		Promise.resolve(promise);
 	}
 
+	// replaces stuff and lets user save html file
 	var transcode = function() {
 		let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/";
+		
+		makeHttpRequest("transcode.html", function(e) {
+			let demoHtml = this.response;
 
-		let request = new XMLHttpRequest();
-		request.open('GET', "transcode.html", true);
+			demoHtml = strRepl(demoHtml, "///", "");
+			demoHtml = strRepl(demoHtml, "$baseUrl$", baseUrl);
+			demoHtml = strRepl(demoHtml, "$userCode", editor.getSession().getValue());
 
-		request.onload = function() {
-			if (this.status >= 200 && this.status < 400) {
+			let filename = "my-bot.html";
 
-				let demoHtml = this.response;
-
-				demoHtml = strRepl(demoHtml, "///", "");
-				demoHtml = strRepl(demoHtml, "$baseUrl$", baseUrl);
-				demoHtml = strRepl(demoHtml, "$userCode", editor.getSession().getValue());
-
-				let filename = "my-bot.html";
-
-				var blob = new Blob([demoHtml], {type: 'text/html'});
-				if(window.navigator.msSaveOrOpenBlob) {
-					window.navigator.msSaveBlob(blob, filename);
-				} else {
-					var elem = window.document.createElement('a');
-					elem.href = window.URL.createObjectURL(blob);
-					elem.download = filename;        
-					document.body.appendChild(elem);
-					elem.click();        
-					document.body.removeChild(elem);
-				}
+			// stolen from stackoverflow
+			// saves the stuff as a file
+			var blob = new Blob([demoHtml], {type: 'text/html'});
+			if(window.navigator.msSaveOrOpenBlob) {
+				window.navigator.msSaveBlob(blob, filename);
 			} else {
-				alert("Failed loading the transcode html file!");
-				// We reached our target server, but it returned an error
+				var elem = window.document.createElement('a');
+				elem.href = window.URL.createObjectURL(blob);
+				elem.download = filename;        
+				document.body.appendChild(elem);
+				elem.click();        
+				document.body.removeChild(elem);
 			}
-		};
-
-		request.onerror = function(e) {
+		}, function (err) {
 			alert("Failed loading the transcode html file!");
-		};
-
-		request.send();
+		});
 	};
 
 	var loaddemo = function() {
@@ -185,28 +201,14 @@ var EEIDE = function() {
 
 		if(canErase) {
 			editor.getSession().setValue("");
-		}
-
-		let request = new XMLHttpRequest();
-		request.open('GET', "demos/" + getById(demoLoad).value + '-demo.js', true);
-
-		request.onload = function() {
-			if (this.status >= 200 && this.status < 400) {
-				if(canErase) {
-					editor.getSession().setValue(this.response);
-					//alert("Demo loaded!");
-				}
-			} else {
+		
+			makeHttpRequest("demos/" + getById(demoLoad).value + "-demo.js", function(e) {
+				editor.getSession().setValue(e.response);
+				//alert("Demo loaded!");
+			}, function (err) {
 				alert("Demo load failed!");
-				// We reached our target server, but it returned an error
-			}
-		};
-
-		request.onerror = function(e) {
-			alert("Demo load failed!");
-		};
-
-		request.send();
+			});
+		}
 	};
 
 	eeide.connect = connect;
