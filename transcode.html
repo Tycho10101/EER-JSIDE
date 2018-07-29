@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>Transcoded Bot - from Everybody Edits JS IDE</title>
+		<script src="$baseUrl$js/PlayerIOClient.development.js"></script>
+		<script src="$baseUrl$js/jsparse_clean.js"></script>
+		<script src="$baseUrl$js/BlockHandler.js"></script>
+		<script src="$baseUrl$js/ConnectHandler.js"></script>
+	</head>
+
+	<body>
+		<script>
+			let __EEJSIDE___ = prompt("Email: ");
+			let __EEJSIDE____ = prompt("Password: ");
+			let __EEJSIDE_____ = prompt("World ID: ");
+			
+			var client;
+			var connection;
+			
+			Promise.resolve(authenticate(__EEJSIDE___, __EEJSIDE____).then(__EEJSIDE_ => {
+				Promise.resolve(joinRoom(__EEJSIDE_.cli, __EEJSIDE_.cfg, __EEJSIDE_____).then(__EEJSIDE__ => {
+					client = __EEJSIDE_.cli;
+					connection = __EEJSIDE__.con;
+					
+					//Here is where your bot code is!
+					
+					///$userCode$
+					
+					//Here's where your bot code ends!
+				}));
+			}));
+		</script>
+	</body>
+</html>
