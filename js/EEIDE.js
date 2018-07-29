@@ -166,7 +166,7 @@ var EEIDE = function() {
 		let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/";
 		
 		makeHttpRequest("transcode.html", function(e) {
-			let demoHtml = this.response;
+			let demoHtml = e.response;
 
 			demoHtml = strRepl(demoHtml, "///", "");
 			demoHtml = strRepl(demoHtml, "$baseUrl$", baseUrl);
@@ -192,6 +192,7 @@ var EEIDE = function() {
 		});
 	};
 
+	// loads demos from folder on the repo
 	var loaddemo = function() {
 		let canErase = editor.getSession().getValue().length < 1;
 
@@ -219,6 +220,18 @@ var EEIDE = function() {
 	eeide.config = null;
 
 	disable(buttonCompile); // in case of refresh
+	
+	// load the local storage
+	
+	if(localStorage.botCode) {
+		editor.getSession().setValue(localStorage.botCode);
+	}
+	
+	// save every 10 seconds
+	
+	setInterval(() => {
+		localStorage.botCode = editor.getSession().getValue();
+	}, 10000);
 
 	return eeide;
 }
