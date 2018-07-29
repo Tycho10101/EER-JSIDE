@@ -37,10 +37,10 @@ async function joinRoom(cli, cfg, worldID) {
 	let roomType = "Everybodyedits";
 	
 	if (worldID.startsWith("BW")) {
-		worldID = "Beta";
+		roomType = "Beta";
 	}
 	
-	let con = await asPromise(cli.multiplayer.createJoinRoom, worldID, worldID + cfg.version, true, null, null);
+	let con = await asPromise(cli.multiplayer.createJoinRoom, worldID, roomType + cfg.version, true, null, null);
 	
 	return { con: con };
 }
