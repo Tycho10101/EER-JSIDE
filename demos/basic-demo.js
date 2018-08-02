@@ -6,6 +6,12 @@
 //
 // So you can use whatever functions those have in your code!
 //
+// EEJSIDE gives you some variables to start with that you can use when coding. They are:
+// 'connection' PlayerIOClient Connection
+// 'client' PLayerIOClient Client
+// 'config' ("config", "config") BigDB object
+// 'log(msg)' Log a message to the EEJSIDE console
+//
 // ~by SirJosh3917/ninjasupeatsninja
 
 // please only use var, 'let' will give you errors.
@@ -24,6 +30,7 @@ connection.addMessageCallback("*", function(m) {
 			
 		// on "init2"
 		case "init2": {
+			log("init2 recieved!");
 			
 			// say "Hello, World!"
 			connection.send("say", "Hello, World!");
@@ -34,6 +41,7 @@ connection.addMessageCallback("*", function(m) {
 			
 			// if they said "!download"
 			if(m.getString(1) == "!download") {
+				log("Someone requested download!");
 				
 				// tell them that
 				connection.send("say", "There is no download for this bot, it runs in your browser! Check out the Everybody Edits JavaScript IDE!")
@@ -42,5 +50,6 @@ connection.addMessageCallback("*", function(m) {
 	}
 });
 
+log("Sending init!");
 // send "init"
 connection.send("init");

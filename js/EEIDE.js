@@ -20,6 +20,7 @@ var EEIDE = function() {
 	const inputWorld = "input-world";
 	const textareaWorkspace= "jscode";
 	const demoLoad = "demo-load";
+	const loggerBox = "log";
 	
 	// ~ HELPER FUNCTIONS ~
 
@@ -93,11 +94,37 @@ var EEIDE = function() {
 		newScript.text = textInput;
 		document.body.appendChild(newScript);
 	}
+	
+	// pad a string with zeros
+	let lpad = function(padString, length) {
+    	var str = padString.toString();
+    	while (str.length < length)
+        	str = "0" + str;
+    	return str;
+	}
+	
+	// get the exact time
+	let getTime = function(input, separator) {
+		var pad = function(input) {return input < 10 ? "0" + input : input;};
+    	var date = input ? new Date(input) : new Date();
+    	return [
+			lpad(date.getHours(), 2),
+        	lpad(date.getMinutes(), 2),
+        	lpad(date.getSeconds(), 2),
+        	lpad(date.getMilliseconds(), 3)
+    	].join(typeof separator !== 'undefined' ?  separator : ':' );
+	}
+	
+	// put [] around something
+	let surround = function(input) {
+		return "[" + input + "]";
+	}
 
 	// ~ BUTTON ACTIONS
 	
 	// connect to a world
 	var connect = function() {
+		logger("Authenticating...");
 		disable(buttonConnect);
 		disable(buttonCompile);
 
@@ -105,6 +132,7 @@ var EEIDE = function() {
 		let password = getById(inputPassword).value;
 
 		let promise = authenticate(email, password).then(auth => {
+			logger("Authenticated!");
 			eeide.client = auth.cli;
 			eeide.config = auth.cfg;
 
@@ -113,6 +141,7 @@ var EEIDE = function() {
 			
 			colorItem(buttonConnect, greenMain, greenFade);
 		}).catch(err => {
+			logger("Error Authenticating: " + err);
 			console.log(err);
 			
 			enable(buttonConnect);
@@ -127,6 +156,7 @@ var EEIDE = function() {
 
 	// runs the code
 	var compile = function() {
+		logger("Preparing compile...");
 		disable(buttonConnect);
 		disable(buttonCompile);
 
@@ -134,20 +164,27 @@ var EEIDE = function() {
 			eeide.connection.disconnect();
 		}
 
+		logger("Joining room...");
 		let promise = joinRoom(eeide.client, eeide.config, getById(inputWorld).value).then(con => {
 			eeide.connection = con.con;
 
+			logger("Running script...");
 			runAsScript(
 				"var connection = eeide.connection;" +
 				"var client = eeide.client;" +
 				"var config = eeide.config;" +
-				editor.getSession().getValue());
+				"var log = eeide.logger;" +
+				"try{" +
+				editor.getSession().getValue() +
+				"}catch(error){log(error, \"ERR\");}");
 			
 			colorItem(buttonCompile, greenMain, greenFade);
 
 			enable(buttonConnect);
 			enable(buttonCompile);
 		}).catch(err => {
+			
+			logger("Error joining: " + err);
 			console.log(err);
 			
 			enable(buttonConnect);
@@ -163,9 +200,11 @@ var EEIDE = function() {
 
 	// replaces stuff and lets user save html file
 	var transcode = function() {
+		logger("Downloading transcode page...");
 		let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/";
 		
 		makeHttpRequest("transcode.html", function(e) {
+			logger("Replacing strings...");
 			let demoHtml = e.response;
 
 			demoHtml = strRepl(demoHtml, "///", "");
@@ -174,6 +213,7 @@ var EEIDE = function() {
 
 			let filename = "my-bot.html";
 
+			logger("Serving download...");
 			// stolen from stackoverflow
 			// saves the stuff as a file
 			var blob = new Blob([demoHtml], {type: 'text/html'});
@@ -188,29 +228,50 @@ var EEIDE = function() {
 				document.body.removeChild(elem);
 			}
 		}, function (err) {
+			logger("Failed transcoding! " + err);
 			alert("Failed loading the transcode html file!");
 		});
 	};
 
 	// loads demos from folder on the repo
 	var loaddemo = function() {
+		logger("Loading demo...");
 		let canErase = editor.getSession().getValue().length < 1;
 
 		if(!canErase) {
+			logger("Confirming workspace clear");
 			canErase = confirm("Are you sure you want to clear the text in your workspace?");
 		}
 
+		logger("Will load demo: " + canErase);
 		if(canErase) {
+			logger("Clearing the editor");
 			editor.getSession().setValue("");
-		
-			makeHttpRequest("demos/" + getById(demoLoad).value + "-demo.js", function(e) {
+
+			let dwnUrl = "demos/" + getById(demoLoad).value + "-demo.js";
+			logger("Downloading " + dwnUrl);
+			makeHttpRequest(dwnUrl, function(e) {
+				logger("Loading demo into editor");
 				editor.getSession().setValue(e.response);
-				//alert("Demo loaded!");
+				logger("Demo loaded!");
 			}, function (err) {
-				alert("Demo load failed!");
+				alert("Demo load failed! " + err);
 			});
 		}
 	};
+	
+	// logs a line to the textarea
+	var logger = function(msg, name = "EEJSIDE") {
+		let logBox = getById(loggerBox);
+		
+		logBox.innerHTML += surround(getTime()) + " " + surround(name) + ": " + msg + "\n";
+		
+		logBox.scrollTo(0, logBox.scrollHeight);
+	}
+	
+	var cliFriendlyLogger = function(msg) {
+		logger(msg, "BOT");
+	}
 
 	eeide.connect = connect;
 	eeide.compile = compile;
@@ -218,6 +279,7 @@ var EEIDE = function() {
 	eeide.loaddemo = loaddemo;
 	eeide.client = null;
 	eeide.config = null;
+	eeide.logger = cliFriendlyLogger;
 
 	disable(buttonCompile); // in case of refresh
 	
