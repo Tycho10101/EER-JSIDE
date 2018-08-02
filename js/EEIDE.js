@@ -170,7 +170,7 @@ var EEIDE = function() {
 
 			demoHtml = strRepl(demoHtml, "///", "");
 			demoHtml = strRepl(demoHtml, "$baseUrl$", baseUrl);
-			demoHtml = strRepl(demoHtml, "$userCode", editor.getSession().getValue());
+			demoHtml = strRepl(demoHtml, "$userCode$", editor.getSession().getValue());
 
 			let filename = "my-bot.html";
 
