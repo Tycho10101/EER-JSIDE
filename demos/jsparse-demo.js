@@ -5,7 +5,7 @@
 //
 // ~by SirJosh3917/ninjasupeatsninja
 
-let parseSigns = function(e) {
+var parseSigns = function(e) {
 	// jsparse(e) will parse out the world, and we'll only accept anything that has id 385 ( signs )
 	let signs = jsparse(e).filter(b => b.id == 385); // credit to https://github.com/atillabyte/EEWebs/blob/master/js/eewebs.js#L27
 
