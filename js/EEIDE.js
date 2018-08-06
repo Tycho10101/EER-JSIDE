@@ -4,9 +4,9 @@ var EEIDE = function() {
 	var editor = ace.edit("jscode");
 	editor.setTheme("ace/theme/monokai");
 	editor.session.setMode("ace/mode/javascript");
-	editor.getSession().$worker.send("setOptions", [{
-		maxerr: 10000
-	}]);
+	//editor.getSession().$worker.send("setOptions", [{
+	//	maxerr: 10000
+	//}]);
 	
 	let eeide = {};
 
