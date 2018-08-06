@@ -44,7 +44,7 @@ connection.addMessageCallback("*", function(m) {
 				log("Someone requested download!");
 				
 				// tell them that
-				connection.send("say", "There is no download for this bot, it runs in your browser! Check out the Everybody Edits JavaScript IDE!")
+				connection.send("say", "There is no download for this bot, it runs in your browser! Check out the Everybody Edits JavaScript IDE!");
 			}
 		} break;
 	}

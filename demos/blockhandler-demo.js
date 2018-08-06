@@ -48,7 +48,7 @@ connection.addMessageCallback("*", function(m) {
 					
 					// Check if the arguments are valid
 					// BH.width and BH.height are the width and the height of the world
-					if (x == NaN || y == NaN || l == NaN ||
+					if (isNaN(x) || isNaN(y) || isNaN(l) ||
 						x < 0 || x >= BH.width ||
 						y < 0 || y >= BH.width ||
 						l < 0 || l >= 2) {

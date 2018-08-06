@@ -20,7 +20,7 @@ var parseSigns = function(e) {
 		// send init2
 		connection.send("init2");
 	}
-}
+};
 
 connection.addMessageCallback("init", parseSigns);
 connection.addMessageCallback("reset", parseSigns);
