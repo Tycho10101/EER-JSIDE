@@ -12,12 +12,12 @@ async function authenticate(email, password) {
 	
 	cli.multiplayer.useSecureConnections = isHttps;
 	
-	const objPromise = asPromise(cli.bigDB.loadMyPlayerObject);
+	// const objPromise = asPromise(cli.bigDB.loadMyPlayerObject);
 	const cfgPromise = asPromise(cli.bigDB.load, "config", "config");
 	
-	let obj = await objPromise;
+	// let obj = await objPromise;
 	
-	if ("linkedTo" in obj) {
+	/*if ("linkedTo" in obj) {
 		
 		let auth = await asPromise(cli.multiplayer.createJoinRoom, "auth" + cli.ConnectedUserId, "AuthRoom", true, null, { type: "Link" });
 		
@@ -26,7 +26,7 @@ async function authenticate(email, password) {
 		cli = await asPromise(PlayerIO.authenticate, "everybody-edits-su9rn58o40itdbnw69plyw", "linked", { userId: msg.getString(0), auth: msg.getString(1) }, { });
 		cli.multiplayer.useSecureConnections = isHttps;
 		
-	}
+	}*/
 	
 	let cfg = await cfgPromise;
 	
