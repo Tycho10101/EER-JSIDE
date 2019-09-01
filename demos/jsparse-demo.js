@@ -12,8 +12,8 @@ var parseSigns = function(e) {
 	// for every sign
 	signs.forEach((i) => {
 
-		// log it to the console
-		console.log(i.args[1]);
+		// log the text to the log window
+		log(i.args[1]);
 	});
 
 	if(e.type == "init") {
