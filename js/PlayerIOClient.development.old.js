@@ -42,7 +42,7 @@ if (typeof (_pio) == 'undefined') { _pio = {} }
 						try{
 							value = converter(result);
 						} catch (e) {
-							_pio.handleError(originalStack, errorCallback, PlayerIOErrorCode.GeneralError, e.message)
+							_pio.handleError(originalStack, errorCallback, e.code, e.message)
 						}
 					}
 					if( successCallback ){
@@ -758,8 +758,8 @@ if (!JSON) {
 	_pio.ApiSecurityRule = {RespectClientSetting:0,UseHttp:1,UseHttps:2}
 	c.authenticate = function(gameId, connectionId, authenticationArguments, playerInsightSegments, clientAPI, clientInfo, playCodes, successCallback, errorCallback, converter){this.call(13, {gameid:gameId, connectionid:connectionId, authenticationarguments:authenticationArguments, playerinsightsegments:playerInsightSegments, clientapi:clientAPI, clientinfo:clientInfo, playcodes:playCodes}, successCallback, errorCallback, converter)}
 	c.createRoom = function(roomId, roomType, visible, roomData, isDevRoom, successCallback, errorCallback, converter){this.call(21, {roomid:roomId, roomtype:roomType, visible:visible, roomdata:roomData, isdevroom:isDevRoom}, successCallback, errorCallback, converter)}
-	c.joinRoom = function(roomId, joinData, isDevRoom, serverDomainNameNeeded, successCallback, errorCallback, converter){this.call(24, {roomid:roomId, joindata:joinData, isdevroom:isDevRoom, serverdomainnameneeded:serverDomainNameNeeded}, successCallback, errorCallback, converter)}
-	c.createJoinRoom = function(roomId, roomType, visible, roomData, joinData, isDevRoom, serverDomainNameNeeded, successCallback, errorCallback, converter){this.call(27, {roomid:roomId, roomtype:roomType, visible:visible, roomdata:roomData, joindata:joinData, isdevroom:isDevRoom, serverdomainnameneeded:serverDomainNameNeeded}, successCallback, errorCallback, converter)}
+	c.joinRoom = function(roomId, joinData, isDevRoom, successCallback, errorCallback, converter){this.call(24, {roomid:roomId, joindata:joinData, isdevroom:isDevRoom}, successCallback, errorCallback, converter)}
+	c.createJoinRoom = function(roomId, roomType, visible, roomData, joinData, isDevRoom, successCallback, errorCallback, converter){this.call(27, {roomid:roomId, roomtype:roomType, visible:visible, roomdata:roomData, joindata:joinData, isdevroom:isDevRoom}, successCallback, errorCallback, converter)}
 	c.listRooms = function(roomType, searchCriteria, resultLimit, resultOffset, onlyDevRooms, successCallback, errorCallback, converter){this.call(30, {roomtype:roomType, searchcriteria:searchCriteria, resultlimit:resultLimit, resultoffset:resultOffset, onlydevrooms:onlyDevRooms}, successCallback, errorCallback, converter)}
 	c.userLeftRoom = function(extendedRoomId, newPlayerCount, closed, successCallback, errorCallback, converter){this.call(40, {extendedroomid:extendedRoomId, newplayercount:newPlayerCount, closed:closed}, successCallback, errorCallback, converter)}
 	c.writeError = function(source, error, details, stacktrace, extraData, successCallback, errorCallback, converter){this.call(50, {source:source, error:error, details:details, stacktrace:stacktrace, extradata:extraData}, successCallback, errorCallback, converter)}
@@ -818,9 +818,6 @@ if (!JSON) {
 	c.facebookOAuthConnect = function(gameId, accessToken, partnerId, playerInsightSegments, clientAPI, clientInfo, successCallback, errorCallback, converter){this.call(418, {gameid:gameId, accesstoken:accessToken, partnerid:partnerId, playerinsightsegments:playerInsightSegments, clientapi:clientAPI, clientinfo:clientInfo}, successCallback, errorCallback, converter)}
 	c.steamConnect = function(gameId, steamAppId, steamSessionTicket, playerInsightSegments, clientAPI, clientInfo, successCallback, errorCallback, converter){this.call(421, {gameid:gameId, steamappid:steamAppId, steamsessionticket:steamSessionTicket, playerinsightsegments:playerInsightSegments, clientapi:clientAPI, clientinfo:clientInfo}, successCallback, errorCallback, converter)}
 	c.simpleUserGetSecureLoginInfo = function(successCallback, errorCallback, converter){this.call(424, {}, successCallback, errorCallback, converter)}
-	c.leaderboardsGet = function(group, leaderboard, index, count, neighbourUserId, filterUserIds, successCallback, errorCallback, converter){this.call(431, {group:group, leaderboard:leaderboard, index:index, count:count, neighbouruserid:neighbourUserId, filteruserids:filterUserIds}, successCallback, errorCallback, converter)}
-	c.leaderboardsSet = function(group, leaderboard, score, successCallback, errorCallback, converter){this.call(434, {group:group, leaderboard:leaderboard, score:score}, successCallback, errorCallback, converter)}
-	c.leaderboardsCount = function(group, leaderboard, successCallback, errorCallback, converter){this.call(437, {group:group, leaderboard:leaderboard}, successCallback, errorCallback, converter)}
 	c.joinCluster = function(clusterAccessKey, isDevelopmentServer, ports, machineName, version, machineId, os, cpu, cpuCores, cpuLogicalCores, cpuAddressWidth, cpuMaxClockSpeed, ramMegabytes, ramSpeed, successCallback, errorCallback, converter){this.call(504, {clusteraccesskey:clusterAccessKey, isdevelopmentserver:isDevelopmentServer, ports:ports, machinename:machineName, version:version, machineid:machineId, os:os, cpu:cpu, cpucores:cpuCores, cpulogicalcores:cpuLogicalCores, cpuaddresswidth:cpuAddressWidth, cpumaxclockspeed:cpuMaxClockSpeed, rammegabytes:ramMegabytes, ramspeed:ramSpeed}, successCallback, errorCallback, converter)}
 	c.serverHeartbeat = function(serverId, appDomains, serverTypes, machineCPU, processCPU, memoryUsage, avaliableMemory, freeMemory, runningRooms, usedResources, aPIRequests, aPIRequestsError, aPIRequestsFailed, aPIRequestsExecuting, aPIRequestsQueued, aPIRequestsTime, serverUnixTimeUtc, successCallback, errorCallback, converter){this.call(510, {serverid:serverId, appdomains:appDomains, servertypes:serverTypes, machinecpu:machineCPU, processcpu:processCPU, memoryusage:memoryUsage, avaliablememory:avaliableMemory, freememory:freeMemory, runningrooms:runningRooms, usedresources:usedResources, apirequests:aPIRequests, apirequestserror:aPIRequestsError, apirequestsfailed:aPIRequestsFailed, apirequestsexecuting:aPIRequestsExecuting, apirequestsqueued:aPIRequestsQueued, apirequeststime:aPIRequestsTime, serverunixtimeutc:serverUnixTimeUtc}, successCallback, errorCallback, converter)}
 	c.getGameAssemblyUrl = function(clusterAccessKey, gameCodeId, machineId, successCallback, errorCallback, converter){this.call(513, {clusteraccesskey:clusterAccessKey, gamecodeid:gameCodeId, machineid:machineId}, successCallback, errorCallback, converter)}
@@ -1128,12 +1125,6 @@ PlayerIOErrorCode = {
 		* @type oneScore
 		*/
 		this.oneScore = new _pio.oneScore(channel);
-
-		/**
-		* The Leaderboards service
-	    * @type leaderboards
-	    */
-		this.leaderboards = new _pio.leaderboards(channel, this.connectUserId);
 
 		/**
 		* The Notifications service
@@ -2668,7 +2659,7 @@ PlayerIOErrorCode = {
 			// this lets autocomplete in visual studio know the success callback takes a connection.
 			clearTimeout(setTimeout(function () { successCallback(new _pio.connection()) },10000))
 			var originalStack = new Error();
-			channel.joinRoom(roomId, _pio.convertToKVArray(joinData), self.developmentServer != null, self.useSecureConnections, function(){}, errorCallback, function (result) {
+			channel.joinRoom(roomId, _pio.convertToKVArray(joinData), self.developmentServer != null, function(){}, errorCallback, function (result) {
 				return new _pio.connection(originalStack, self.developmentServer, self.useSecureConnections, result.endpoints, result.joinkey, joinData || {}, successCallback, errorCallback)
 			});
 		}
@@ -2687,7 +2678,7 @@ PlayerIOErrorCode = {
 			// this lets autocomplete in visual studio know the success callback takes a connection.
 			clearTimeout(setTimeout(function () { successCallback(new _pio.connection()) },10000))
 			var originalStack = new Error();
-			channel.createJoinRoom(roomId, roomType, visible, _pio.convertToKVArray(roomData), _pio.convertToKVArray(joinData), self.developmentServer != null, self.useSecureConnections, function () { }, errorCallback, function (result) {
+			channel.createJoinRoom(roomId, roomType, visible, _pio.convertToKVArray(roomData), _pio.convertToKVArray(joinData), self.developmentServer != null, function () { }, errorCallback, function (result) {
 				return new _pio.connection(originalStack, self.developmentServer, self.useSecureConnections, result.endpoints, result.joinkey, joinData || {}, successCallback, errorCallback)
 			})
 		}
@@ -4217,190 +4208,7 @@ PlayerIOErrorCode = {
 })();
 (function () {
 	/**
-	* @class The Leaderboard service. This class has methods for setting a player's score on a leaderboard, getting 
-    * the number of players on a leaderboard, and getting toplists of players or the neighbourhood of players around the current player.
-    * Leaderboard groups have to be defined in the admin panel first.
-    * 
-	* @example Here's how to set a player's score in the default leaderboard of the group "score":
-	* <listing>
-    * client.leaderboards.set("score", null, 4711, function(playerentry) {
-	*	console.log(playerentry.rank);
-	*	console.log(playerentry.score);
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-    * 
-	* @example Here's how to get the number of players in a default leaderboard:
-	* <listing>
-    * client.leaderboards.count("score", null, function(count) {
-	*	console.log(count);
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	* @example Here's how to get the top 10 players in a default leaderboard:
-	* <listing>
-    * client.leaderboards.getTop("score", null, 0, 10, null, function(entries) {
-	*   for (int i = 0; i != entries.length; i++) {
-    *     console.log('player: ' + entries[i].userId + ', rank: ' + entries[i].rank + ', score: ' + entries[i].score);
-    *   }
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	* @example If you know there are more than 10 players in the entire leaderboard, here's how to get the next page of 10 entries:
-	* <listing>
-    * client.leaderboards.getTop("score", null, 10, 10, null, function(entries) {
-    *   for (int i = 0; i != entries.length; i++) {
-    *     console.log('player: ' + entries[i].userId + ', rank: ' + entries[i].rank + ', score: ' + entries[i].score);
-    *   }
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	* @example If you want to get the rank and score of a single player, pass in the connectUserId as a filter:
-	* <listing>
-    * client.leaderboards.getTop("score", null, 0, 1, ["simpleHenrik"], function(entries) {
-	*	console.log(entries[0].rank);
-	*	console.log(entries[0].score);
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	* @example You can pass in multiple connectuserids to get a filtered list of only those players.For example, by passing
-	* in a list of friends of the current player, you can get a toplist for the friends. Don't forget to also pass in the
-	* connectuserid of the current player if you want his position as well:
-	* <listing>
-	* client.leaderboards.getTop("score", null, 0, 5, [client.connectUserId, "simpleAdam", "simpleBetty", "simpleCharlie", "simpleDorothy"], function(entries) {
-	*   for (int i = 0; i != entries.length; i++) {
-    *     console.log('player: ' + entries[i].userId + ', rank: ' + entries[i].rank + ', score: ' + entries[i].score);
-    *   }
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	* @example The GetTop method starts at the top of the leaderboard, but if you want to know which players are immediately surrounding the current player, use the GetNeighbourhood method.
-	* The index parameter can be either positive or negative. If you use a negative number, the results will start above the current player, with better players, player who have a lower rank
-	* than the current player, and a better score. An index of 0 means the current player, and a positive index means that you start below the current player, with worse player, players 
-	* who have a higher rank, and a worse score. For example, to get the 5 players above the current player, the current player himself, and the 5 players directly below, you can do this:
-	* <listing>
-	* client.leaderboards.getNeighbourhood("score", null, -5, 11, null, function(entries) {
-	*   for (int i = 0; i != entries.length; i++) {
-    *     console.log('player: ' + entries[i].userId + ', rank: ' + entries[i].rank + ', score: ' + entries[i].score);
-    *   }
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	* @example Finally, GetNeighbourhood also takes a list of players that you can use to filter the results, but unlike GetTop, the current player is always automatically included in the
-	* filter list. For example, if you have a long list of friends, but want to know which friend is immediately above the current player in the leaderboard, and which friend is immediately
-	* below the current player, you can do something like this:
-	* <listing>
-	* client.leaderboards.getNeighbourhood("score", null, -1, 3, ["simpleAdam", "simpleBetty", "simpleCharlie", "simpleDorothy"], function(entries) {
-	*   for (int i = 0; i != entries.length; i++) {
-    *     console.log('player: ' + entries[i].userId + ', rank: ' + entries[i].rank + ', score: ' + entries[i].score);
-    *   }
-	* }, function(error) { 
-	*   console.log(error);
-	* });
-	* </listing>
-	*/
-	_pio.leaderboards = function (channel, connectUserId) {
-
-		/**
-		* Sets the score for a user on a leaderboard.
-		* @param {string} group The identifier of the leaderboard group.
-		* @param {string} leaderboard The identifier of the specific leaderboard in the group, or null for the default leaderboard.
-		* @param {number} score The score to set for the user.
-		* @param {function(leaderboardEntry)} successCallback Callback function that will be called when the operation has been completed.
-		* @param {function(PlayerIOError)} errorCallback Callback function that will be called if an error occurs.
-		*/
-		this.set = function (group, leaderboard, score, successCallback, errorCallback) {
-			channel.leaderboardsSet(group, leaderboard, score, successCallback, errorCallback, function (result) {
-				var entry = new _pio.leaderboardEntry(result.leaderboardentry.userid, result.leaderboardentry.rank, result.leaderboardentry.score);
-				return entry;
-			});
-		}
-
-		/**
-		* Sets the score for a user on a leaderboard.
-		* @param {string} group The identifier of the leaderboard group.
-		* @param {string} leaderboard The identifier of the specific leaderboard in the group, or null for the default leaderboard.
-		* @param {number} score The score to set for the user.
-		* @param {function(Number)} successCallback Callback function that will be called when the operation has been completed.
-		* @param {function(PlayerIOError)} errorCallback Callback function that will be called if an error occurs.
-	    */
-		this.count = function (group, leaderboard, successCallback, errorCallback) {
-			channel.leaderboardsCount(group, leaderboard, successCallback, errorCallback, function (result) {
-				return result.count;
-			});
-		}
-
-		/**
-		* Gets the top entries of a leaderbord.
-	    * @param {string} group The identifier of the leaderboard group.
-		* @param {string} leaderboard The identifier of the specific leaderboard in the group, or null for the default leaderboard.
-	    * @param {Number} index What index to start getting entries from. An index of 0 starts at the user with rank #1, an index of 100 starts at the user with rank #101, etc.
-	    * @param {Number} count How many leaderboard entries to get. The max number of entries that can be retrieved per call is 1000.
-	    * @param {string[]} filterUserIds An optional list of users to filter the results by. For example, if you pass in a list of the user's friends, you could get the 10 best friends, and their absolute rank.
-		* @param {function(leaderboardEntry[])} successCallback Callback function that will be called with the loaded entries.
-		* @param {function(PlayerIOError)} errorCallback Callback function that will be called if an error occurs.
-	    */
-		this.getTop = function (group, leaderboard, index, count, filterUserIds, successCallback, errorCallback) {
-			channel.leaderboardsGet(group, leaderboard, index, count, null, filterUserIds, successCallback, errorCallback, function (result) {
-				if (result == null || result.leaderboardentry == null || result.leaderboardentry.length == 0) { return []; }
-				var entries = [];
-				for (var i = 0; i < result.leaderboardentry.length; i++) {
-					entries.push(new _pio.leaderboardEntry(result.leaderboardentry[i].userid, result.leaderboardentry[i].rank, result.leaderboardentry[i].score));
-				}
-				return entries;
-			});
-		}
-
-		/**
-		* Gets the neighbourhood of entries of a leaderbord around the current user.
-	    * @param {string} group The identifier of the leaderboard group.
-		* @param {string} leaderboard The identifier of the specific leaderboard in the group, or null for the default leaderboard.
-	    * @param {Number} index What index to start getting entries from. An index of 0 starts at the user. A negative index starts that many entries above the user, and a positive index starts below the user.
-	    * @param {Number} count How many leaderboard entries to get. The max number of entries that can be retrieved per call is 1000.
-	    * @param {string[]} filterUserIds An optional list of users to filter the results by. For example, if you pass in a list of the user's friends, you could get the 10 closest friends above the user.
-		* @param {function(leaderboardEntry[])} successCallback Callback function that will be called with the loaded entries.
-		* @param {function(PlayerIOError)} errorCallback Callback function that will be called if an error occurs.
-	    */
-		this.getNeighbourhood = function (group, leaderboard, index, count, filterUserIds, successCallback, errorCallback) {
-			channel.leaderboardsGet(group, leaderboard, index, count, connectUserId, filterUserIds, successCallback, errorCallback, function (result) {
-				if (result == null || result.leaderboardentry == null || result.leaderboardentry.length == 0) { return []; }
-				var entries = [];
-				for (var i = 0; i < result.leaderboardentry.length; i++) {
-					entries.push(new _pio.leaderboardEntry(result.leaderboardentry[i].userid, result.leaderboardentry[i].rank, result.leaderboardentry[i].score));
-				}
-				return entries;
-			});
-		}
-	}
-
-	/**
-	* @class This class encapsulates a leaderboard entry for a user, it contains the connectUserId, the absolute rank of the user, and the score of the user on the leaderboard this entry was loaded from.
-	*/
-	_pio.leaderboardEntry = function (userId, rank, score) {
-		/** The connectUserId
-		* @type String
-		*/
-		this.userId = userId;
-		/** The absolute rank for this user
-		* @type Number
-		*/
-		this.rank = rank;
-		/** The score for this user
-		* @type Number
-		*/
-		this.score = score;
-	}
-})();
-(function () {
-	/**
-	* @deprecated @class The OneScore service. This class is used to update the score of the current user, and loading the 
+	* @class The OneScore service. This class is used to update the score of the current user, and loading the 
 	* scores of other users.
 	* @example Load the current user's OneScore and print the details:
 	* <listing>
@@ -4535,7 +4343,7 @@ PlayerIOErrorCode = {
 	}
 
 	/**
-	* @deprecated @class This class encapsulates the OneScore value for a single user. It contains the user's score, as well as the user's global rank.
+	* @class This class encapsulates the OneScore value for a single user. It contains the user's score, as well as the user's global rank.
 	*/
 	_pio.oneScoreValue = function (percentile, score, topRank) {
 		/** The percentile compared to all other players. A value from 0 -> 100. A value of 30.0 means you are in the bottom 30% of players. A value of 100 means you are in the top 100% with other players.

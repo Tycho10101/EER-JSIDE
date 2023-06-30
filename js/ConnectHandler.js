@@ -8,26 +8,10 @@ function asPromise(func, ...args) {
 }
 
 async function authenticate(email, password) { 
-	let cli = await asPromise(PlayerIO.authenticate, "everybody-edits-v226-5ugofmmni06qbc11k5tqq", "simpleUsers", { email: email, password: password }, { });
-	
+	let cli = await asPromise(PlayerIO.authenticate, "everybody-edits-v226-5ugofmmni06qbc11k5tqq", "public", { email: email, password: password }, { });
 	cli.multiplayer.useSecureConnections = isHttps;
-	
-	// const objPromise = asPromise(cli.bigDB.loadMyPlayerObject);
+
 	const cfgPromise = asPromise(cli.bigDB.load, "config", "config");
-	
-	// let obj = await objPromise;
-	
-	/*if ("linkedTo" in obj) {
-		
-		let auth = await asPromise(cli.multiplayer.createJoinRoom, "auth" + cli.ConnectedUserId, "AuthRoom", true, null, { type: "Link" });
-		
-		let msg = await asPromise(auth.addMessageCallback, "auth");
-		
-		cli = await asPromise(PlayerIO.authenticate, "everybody-edits-su9rn58o40itdbnw69plyw", "linked", { userId: msg.getString(0), auth: msg.getString(1) }, { });
-		cli.multiplayer.useSecureConnections = isHttps;
-		
-	}*/
-	
 	let cfg = await cfgPromise;
 	
 	return { cli: cli, cfg: cfg };
