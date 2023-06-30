@@ -8,7 +8,7 @@ function asPromise(func, ...args) {
 }
 
 async function authenticate(email, password) { 
-	let cli = await asPromise(PlayerIO.authenticate, "everybody-edits-su9rn58o40itdbnw69plyw", "simpleUsers", { email: email, password: password }, { });
+	let cli = await asPromise(PlayerIO.authenticate, "everybody-edits-v226-5ugofmmni06qbc11k5tqq", "simpleUsers", { email: email, password: password }, { });
 	
 	cli.multiplayer.useSecureConnections = isHttps;
 	

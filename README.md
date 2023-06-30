@@ -1,5 +1,5 @@
-# [EEJSIDE](https://sirjosh3917.github.io/EEJSIDE/)
-[Online IDE for making Everybody Edits JavaScript bots.](https://sirjosh3917.github.io/EEJSIDE/)
+# [EER-JSIDE](https://sirjosh3917.github.io/EEJSIDE/)
+[Online IDE for making Everybody Edits Rewritten JavaScript bots.](https://voxalice.github.io/EER-JSIDE/)
 
 ## Features
 
